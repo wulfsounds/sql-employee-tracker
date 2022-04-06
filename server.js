@@ -5,6 +5,7 @@ const { clog } = require("./middleware/clog");
 const api = require("./routes/index");
 const uuid = require("uuid");
 const { readFromFile, readAndAppend } = require("./helpers/fsUtils");
+const cTable = require('console.table');
 
 // This instantiates Express; connecting to default PORT or most available;
 const app = express();
@@ -16,26 +17,34 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/api", api);
 
-
-// app.get("/", (req, res) => res.sendFile("Navigate to /notes or /routes"));
-
 // Connecting to mySQL database
 const db = mysql.createConnection(
 	{
-	  host: 'localhost',
-	  // MySQL username,
-	  user: 'root',
-	  // MySQL password
-	  password: 'Password123!',
-	  database: 'classlist_db'
+		host: "localhost",
+		// MySQL username,
+		user: "root",
+		// MySQL password
+		password: "Password123!",
+		database: "employee_db",
 	},
-	console.log(`Connected to the classlist_db database.`)
-  );
-  
-  // Query database
-  db.query('SELECT * FROM students', function (err, results) {
+	console.log(`Connected to the employee_db database.`)
+);
+
+// Query database
+db.query("SELECT * FROM employee", function (err, results) {
 	console.log(results);
-  });
+});
+
+// Directs api to pull database
+app.get("api/employee", (req, res) => {
+	db.query ('employee_db', (err, results) => {
+	  res.status(200).json(results)
+	});
+  })
+
+app.use((req, res) => {
+	res.status(404).end();
+});
 
 app.get("*", (req, res) => res.send("File Not Found"));
 

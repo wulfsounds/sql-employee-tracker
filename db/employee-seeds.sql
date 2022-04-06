@@ -1,1 +1,0 @@
-INSERT INTO courses (product_name, category_name)
