@@ -26,7 +26,8 @@ async function init() {
             switch (mainMenu) {
                 case 'View All Employees':
                     console.log(`Viewing all employees ✅`);
-                    // console.table(); -- console SQL?
+                    // log employee table
+                    // init()
                     break;
 
                 case 'Add Employee':
@@ -41,7 +42,8 @@ async function init() {
 
                 case 'View All Roles':
                     console.log(`Viewing all roles ✅`);
-                    allRoles();
+                    // log roles table
+                    // init()
                     break;
 
                 case 'Add Roles':
@@ -51,7 +53,8 @@ async function init() {
 
                 case 'View All Departments':
                     console.log(`Viewing all departments ✅`);
-                    allDepartments();
+                    // log departments table
+                    // init()
                     break;
 
                 case 'Add Department':
@@ -62,14 +65,136 @@ async function init() {
         })
 }
 
+async function addEmployees() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: `What is the employee's first name?`,
+                name: 'firstName'
+            },
+            {
+                type: 'input',
+                message: `What is the employee's last name?`,
+                name: 'lastName'
+            },
+            {
+                type: 'list',
+                message: `What is their role?`,
+                choices: [
+                    'SALES LEAD',
+                    'SALES CONSULTANT',
+                    'LEAD ENGINEER',
+                    'SOFTWARE ENGINEER',
+                    'ACCOUNT MANAGER',
+                    'ACCOUNTANT',
+                    'LEGAL TEAM LEAD',
+                    'LAWYER',
+                    'ADD NEW ROLE'
+                ],
+                name: 'title'
+            }
+        ]).then(function ({firstName, lastName, title}){
+            // if existing role, assign to new employee
+            // else addRole, then assign to new employee
+            // then init()
+        })
 
+}
+
+async function updateEmployees() {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: `Which employee would you ike to update?`,
+                choices: [
+                    // add existing
+                ],
+                name: 'profile'
+            }
+        ]).then(function ({profile}) {
+            // if profile exists
+            inquirer
+                .prompt([
+                    {
+                        type: 'list',
+                        message: `What is the employee's new role?`,
+                        choices: [
+                            'SALES LEAD',
+                            'SALES CONSULTANT',
+                            'LEAD ENGINEER',
+                            'SOFTWARE ENGINEER',
+                            'ACCOUNT MANAGER',
+                            'ACCOUNTANT',
+                            'LEGAL TEAM LEAD',
+                            'LAWYER',
+                            'ADD NEW ROLE'
+                        ],
+                        name: 'update'
+                    }
+                ]).then(function ({update}){
+                    // if role exists, assign by list
+                    // else role does not exist, addRole()
+                    // then init()
+                })
+        })
+}
+
+async function addRoles() {
+    inquirer
+        .prompt([
+            {
+                type: `input`,
+                message: `What is the new role?`,
+                name: `roles`
+            }
+        ]).then(function({roles}) {
+            inquirer
+                .prompt([
+                    {
+                        type: `number`,
+                        message: `What is the salary?`,
+                        name: 'salary'
+                    }
+                ]).then(function({salary}){
+                    inquirer
+                        .prompt([
+                            {
+                                type: `list`,
+                                message: `Which department does the new role belong to?`,
+                                choices: [
+                                    'SALES',
+                                    'LEGAL',
+                                    'FINANCE',
+                                    'ENGINEERING'
+                                ],
+                                name: `department`
+                            }
+                        ]).then(function ({department}){
+                            // ASSIGN ROLE TO DEPARTMENT
+                        })
+                })
+        })
+}
+
+async function addDepartment() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'What is the name of the new department?',
+                name: 'departmentName'
+            }
+        ]).then(function ({departmentName}) {
+            //add new department to table
+        })
+}
 
 init();
-//create addEmployees()
-//create updateEmployees()
-//create allRoles()
-//create addRoles()
-//create allDepartments()
-//create addDepartments()
+addEmployees();
+updateEmployees();
+addRoles();
+addDepartment();
 
 module.exports = inquirer

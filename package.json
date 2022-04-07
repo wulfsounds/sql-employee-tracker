@@ -21,6 +21,7 @@
   "dependencies": {
     "clog": "^0.1.6",
     "console.table": "^0.10.0",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "inquirer": "^8.2.2",
     "mysql2": "^2.3.3",

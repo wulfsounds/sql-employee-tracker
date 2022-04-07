@@ -6,7 +6,8 @@ const api = require("./routes/index");
 const uuid = require("uuid");
 const { readFromFile, readAndAppend } = require("./helpers/fsUtils");
 const cTable = require('console.table');
-
+const dotenv = require('dotenv').config()
+console.log(process.env) 
 // This instantiates Express; connecting to default PORT or most available;
 const app = express();
 const PORT = process.env.PORT || 3001;
