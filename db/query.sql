@@ -1,13 +1,10 @@
-SELECT *
-FROM department;
-
 SELECT role.id, role.title, role.salary
 FROM role
 JOIN department ON role.department_id = department.id;
 
-SELECT employee_info.id, employee_info.first_name, employee_info.last_name
-FROM employee_info
-JOIN role ON employee_info.role_id = role.id;
+SELECT employees.id, employees.first_name, employees.last_name
+FROM employees
+JOIN role ON employees.role_id = role.id;
 
 SELECT
     e.first_name + ' ' + e.last_name employee,
