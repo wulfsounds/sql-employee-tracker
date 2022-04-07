@@ -53,14 +53,13 @@ function mainMenu() {
         switch (mainMenu) {
 
             case "View All Employees":
-                console.log(`Viewing all employees ✅`);
-                db.query(`SELECT * FROM employee_info`, function(err, res) {
+                db.query(`SELECT * FROM employees`, function(err, res) {
+					console.log(`Viewing all employees ✅`);
                     console.table(res);
-					if (err) throw err;
+					loop();
                 })
-				loop();
                 break;
-
+				
 			case "Add Employee":
 				console.log(`Adding Employee ✅`);
 				addEmployees();
@@ -72,12 +71,11 @@ function mainMenu() {
 				break;
 
 			case "View All Roles":
-				console.log(`Viewing all roles ✅`);
-				db.query(`SELECT * FROM role`, function (err, res) {
-					console.table(res);
-					if (err) throw err;
-				})
-				loop();
+                db.query(`SELECT * FROM role`, function(err, res) {
+					console.log(`Viewing all roles ✅`);
+                    console.table(res);
+					loop();
+                })
 				break;
 
 			case "Add Roles":
@@ -86,12 +84,11 @@ function mainMenu() {
 				break;
 
 			case "View All Departments":
-				console.log(`Viewing all departments ✅`);
-				db.query(`SELECT * FROM department`, function (err, res) {
-					console.table(res);
-					if (err) throw err;
-				})
-				loop();
+                db.query(`SELECT * FROM department`, function(err, res) {
+					console.log(`Viewing all departments ✅`);
+                    console.table(res);
+					loop();
+                })
 				break;
 
 			case "Add Department":
