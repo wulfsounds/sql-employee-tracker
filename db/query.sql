@@ -10,5 +10,5 @@ SELECT
     e.first_name + ' ' + e.last_name employee,
     m.first_name + ' ' + m.last_name manager
 FROM
-    sales.staffs e
-INNER JOIN sales.staffs m ON m.staff_id = e.manager_id;
+    employees e
+INNER JOIN employees m ON m.id = e.manager_id;

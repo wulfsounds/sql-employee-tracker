@@ -1,14 +1,34 @@
+// Create Local Host Connection
+const express = require('express');
+const PORT = process.env.PORT || 3001;
+const app = express();
+
 // Importing dependencies
 const inquirer = require("inquirer");
-const sequelize = require('./config/sequelize');
 const cTable = require("console.table");
 const mysql = require("mysql2");
-require('dotenv').config();
 
-sequelize.connect(function (err) {
+const db = mysql.createConnection(
+	{
+	  host: 'localhost',
+	  user: 'root',
+	  // Generic Password for homework use.
+	  password: 'Password123!',
+	  database: 'employee_db'
+	},
+	console.log(`Connected to the employee_db database.`)
+  );
+
+db.connect(function (err) {
 	if (err) throw err;
 	mainMenu();
 })
+
+// this functions acts as container for looping the mainMenu() as it's called;
+function loop(){
+	mainMenu();
+}
+
 
 // Main Menu Prompt
 function mainMenu() {
@@ -34,11 +54,11 @@ function mainMenu() {
 
             case "View All Employees":
                 console.log(`Viewing all employees ✅`);
-                sequelize.query(`SELECT * FROM employee_info`, function(err, res) {
+                db.query(`SELECT * FROM employee_info`, function(err, res) {
                     console.table(res);
 					if (err) throw err;
                 })
-				mainMenu();
+				loop();
                 break;
 
 			case "Add Employee":
@@ -53,11 +73,11 @@ function mainMenu() {
 
 			case "View All Roles":
 				console.log(`Viewing all roles ✅`);
-				sequelize.query(`SELECT * FROM role`, function (err, res) {
+				db.query(`SELECT * FROM role`, function (err, res) {
 					console.table(res);
 					if (err) throw err;
 				})
-				mainMenu();
+				loop();
 				break;
 
 			case "Add Roles":
@@ -67,11 +87,11 @@ function mainMenu() {
 
 			case "View All Departments":
 				console.log(`Viewing all departments ✅`);
-				sequelize.query(`SELECT * FROM department`, function (err, res) {
+				db.query(`SELECT * FROM department`, function (err, res) {
 					console.table(res);
 					if (err) throw err;
 				})
-				mainMenu();
+				loop();
 				break;
 
 			case "Add Department":
@@ -119,10 +139,10 @@ function addEmployees() {
 		const query = `
 		INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 		VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`;
-		sequelize.query(query, function (err, res) {
+		db.query(query, function (err, res) {
 			if (err) throw err;
 			console.table(res)
 		})
-		mainMenu();
+		loop();
 	});
 }
