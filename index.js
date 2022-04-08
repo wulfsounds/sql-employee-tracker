@@ -1,5 +1,5 @@
 // Create Local Host Connection
-const express = require('express');
+const express = require("express");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -10,136 +10,253 @@ const mysql = require("mysql2");
 
 const db = mysql.createConnection(
 	{
-	  host: 'localhost',
-	  user: 'root',
-	  // Generic Password for homework use.
-	  password: 'Password123!',
-	  database: 'employee_db'
+		host: "localhost",
+		user: "root",
+		// Generic Password for homework use.
+		password: "Password123!",
+		database: "employee_db",
 	},
 	console.log(`Connected to the employee_db database.`)
-  );
+);
 
 db.connect(function (err) {
 	if (err) throw err;
 	mainMenu();
-})
+});
 
 // this functions acts as container for looping the mainMenu() as it's called;
-function loop(){
+function loop() {
 	mainMenu();
 }
-
 
 // Main Menu Prompt
 function mainMenu() {
 	inquirer
-        .prompt([
-		{
-			type: "list",
-			message: "What would you like to do?",
-			choices: [
-				"View All Employees",
-				"Add Employee",
-				"Update Employee Role",
-				"View All Roles",
-				"Add Roles",
-				"View All Departments",
-				"Add Department",
-				"Quit"
-			],
-			name: "mainMenu",
-		}
-    ]).then(function ({ mainMenu }) {
-        switch (mainMenu) {
+		.prompt([
+			{
+				type: "list",
+				message: "What would you like to do?",
+				choices: [
+					"View All Employees",
+					"Add Employee",
+					"Update Employee Role",
+					"View All Roles",
+					"Add Roles",
+					"View All Departments",
+					"Add Department",
+					"Quit",
+				],
+				name: "mainMenu",
+			},
+		])
+		.then(function ({ mainMenu }) {
+			switch (mainMenu) {
+				case "View All Employees":
+					db.query(`SELECT * FROM employees`, function (err, res) {
+						console.log(`Viewing all employees ✅`);
+						console.table(res);
+						loop();
+					});
+					break;
 
-            case "View All Employees":
-                db.query(`SELECT * FROM employees`, function(err, res) {
-					console.log(`Viewing all employees ✅`);
-                    console.table(res);
-					loop();
-                })
-                break;
-				
-			case "Add Employee":
-				console.log(`Adding Employee ✅`);
-				addEmployees();
-				break;
+				case "Add Employee":
+					console.log(`Adding Employee ✅`);
+					addEmployees();
+					break;
 
-			case "Update Employee Role":
-				console.log(`Updating employees ✅`);
-				updateEmployees();
-				break;
+				case "Update Employee Role":
+					console.log(`Updating employees ✅`);
+					updateEmployees();
+					break;
 
-			case "View All Roles":
-                db.query(`SELECT * FROM role`, function(err, res) {
-					console.log(`Viewing all roles ✅`);
-                    console.table(res);
-					loop();
-                })
-				break;
+				case "View All Roles":
+					db.query(`SELECT * FROM role`, function (err, res) {
+						console.log(`Viewing all roles ✅`);
+						console.table(res);
+						loop();
+					});
+					break;
 
-			case "Add Roles":
-				console.log(`Adding roles ✅`);
-				addRoles();
-				break;
+				case "Add Roles":
+					console.log(`Adding roles ✅`);
+					addRoles();
+					break;
 
-			case "View All Departments":
-                db.query(`SELECT * FROM department`, function(err, res) {
-					console.log(`Viewing all departments ✅`);
-                    console.table(res);
-					loop();
-                })
-				break;
+				case "View All Departments":
+					db.query(`SELECT * FROM department`, function (err, res) {
+						console.log(`Viewing all departments ✅`);
+						console.table(res);
+						loop();
+					});
+					break;
 
-			case "Add Department":
-				console.log(`Adding departments ✅`);
-				addDepartment();
-				break;
+				case "Add Department":
+					console.log(`Adding departments ✅`);
+					addDepartment();
+					break;
 
-			default:
-				break;
-            }
-        });
+				default:
+					"Quit";
+					quit();
+					break;
+			}
+		});
 }
 
 // Gathers the information to add employees to the database;
 function addEmployees() {
 	inquirer
 		.prompt([
-		{
-			type: "input",
-			message: `What is the employee's ID?`,
-			name: "employee_id",
-		},
-		{
-			type: "input",
-			message: `What is the employee's first name?`,
-			name: "first",
-		},
-		{
-			type: "input",
-			message: `What is the employee's last name?`,
-			name: "last",
-		},
-		{
-			type: "input",
-			message: `What is their role ID?`,
-			name: "role",
-		},
-		{
-			type: 'input',
-			message: `What is their manager's ID?`,
-			name: 'manager'
-		}
-	])
-	.then(function ({ employee_id, first, last, role, manager }) {
-		const query = `
-		INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
-		VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`;
-		db.query(query, function (err, res) {
-			if (err) throw err;
-			console.table(res)
+			{
+				type: "input",
+				message: `What is the employee's ID?`,
+				name: "employee_id",
+			},
+			{
+				type: "input",
+				message: `What is the employee's first name?`,
+				name: "first",
+			},
+			{
+				type: "input",
+				message: `What is the employee's last name?`,
+				name: "last",
+			},
+			{
+				type: "input",
+				message: `What is their role ID?`,
+				name: "role",
+			},
+			{
+				type: "input",
+				message: `What is their manager's ID?`,
+				name: "manager",
+			},
+		])
+		.then(function ({ employee_id, first, last, role, manager }) {
+			// Replace role INT for title;
+			db.query(
+				`INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+			VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`,
+				function (err, res) {
+					console.table(res);
+				}
+			);
 		})
-		loop();
-	});
+		.then(() => loop());
 }
+
+function updateEmployees() {
+	inquirer
+		.prompt([
+			{
+				type: "list",
+				message: `Which employee would you like to update?`,
+				choices: function () {
+					let nameArr = [];
+					for (let i = 0; i < res.length; i++) {
+						nameArr.push(res[i].title);
+					}
+					return nameArr;
+				},
+				name: "profile",
+			},
+			{
+				type: "list",
+				message: `What is the employee's new role?`,
+				choices: function () {
+					let roleArr = [];
+					for (let j = 0; j < res.length; j++) {
+						roleArr.push(res[j].title);
+					}
+					return roleArr;
+				},
+				name: "update",
+			},
+		])
+		.then(function ({ profile, update }) {
+			const query = `
+	UPDATE employees
+	SET role_id = "${update}"
+	WHERE id = "${profile}"`;
+			Sequelize.query(query, function (err, res) {
+				if (err) throw err;
+				console.table(res);
+			});
+		});
+}
+
+function addRoles() {
+	inquirer
+		.prompt([
+			{
+				type: `input`,
+				message: `What is the new role?`,
+				name: `roles`,
+			},
+			{
+				type: `number`,
+				message: `What is the salary?`,
+				name: "salary",
+			},
+			{
+				type: `number`,
+				message: `What is the department ID?`,
+				name: `department`,
+			},
+		])
+		.then(function ({ employee_id, first, last, role, manager }) {
+			// Replace role IN for title;
+			db.query(
+				`INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+			VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`,
+				function (err, res) {
+					console.table(res);
+				}
+			);
+		})
+		.then(() => loop());
+}
+
+function addDepartment() {
+	inquirer
+		.prompt([
+			{
+				type: "input",
+				message: "What is the name of the new department?",
+				name: "department",
+			},
+		])
+		.then(function ({ employee_id, first, last, role, manager }) {
+			// Replace role IN for title;
+			db.query(
+				`INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+		VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`,
+				function (err, res) {
+					console.table(res);
+				}
+			);
+		})
+		.then(() => loop());
+}
+
+function quit() {
+	db.end();
+}
+
+/* 
+// CURRENT TEMPLATE //
+db.query(`SELECT * FROM department`, function(err, res) {
+	console.log(`Viewing all departments ✅`);
+	console.table(res);
+	loop();
+})
+
+// OLD TEMPLATE //
+const query = `
+INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`;
+db.query(query, function (err, res) {
+	if (err) throw err;
+	console.table(res)
+*/
