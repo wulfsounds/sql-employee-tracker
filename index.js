@@ -7,7 +7,7 @@ const connection = require("./config/connection");
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(
+3const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASSWORD,
@@ -45,7 +45,7 @@ function init() {
         switch (mainMenu) {
             case "View All Employees":
                 console.log(`Viewing all employees ✅`);
-                let employee = 'SELECT * FROM employee_info';
+                let employee = 'SELECT * FROM employees';
                 Sequelize.query(employee, function(err, res) {
                     console.table(res);
 					if (err) throw err;
@@ -125,7 +125,7 @@ function addEmployees() {
 		])
 		.then(function ({ first, last, role, manager }) {
 			const query = `
-			INSERT INTO employee_info (id, first_name, last_name, role_id, manager_id)
+			INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 			VALUES ("${first}", "${last}", "${role}", "${manager}")`;
 			Sequelize.query(query, function (err, res) {
 				if (err) throw err;
@@ -165,7 +165,7 @@ function updateEmployees() {
 	])
 	.then(function ({ profile, update }) {
 		const query = `
-		UPDATE employee_info
+		UPDATE employees
 		SET role_id = "${update}"
 		WHERE id = "${profile}"`;
 		Sequelize.query(query, function (err, res) {
