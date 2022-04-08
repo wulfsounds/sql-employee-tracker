@@ -146,34 +146,34 @@ function addEmployees() {
 		.then(() => loop());
 }
 
+// FINISH THIS...
 function updateEmployees() {
-	const employDb = `SELECT * FROM employees`
-	dbconnection.promise().query(employDb, (err, res) => {
-		const employ = res.map(({id, firstName, lastName}) => {
-			({name: firstName + " " + lastName, value: id});
+	let sql = `
+	UPDATE employee 
+	SET role_id = ? 
+	WHERE employee.first_name = ? 
+	AND employee.last_name = ?`;
+	
+	db.query(sql, (err, res) => {
 		inquirer
 		.prompt([
 			{
 				type: "list",
-				message: `Which employee would you like to update?`,
-				choices: employ,
 				name: "employee",
+				message: `Which employee would you like to update?`,
+				choices: function () {
+					let employee = [];
+					for (let i= 0; i < res.length; i++) {
+						// employee.push(res[i].)
+					}
+				},
 			}
 		])
 		.then(({ employee }) => {
-			let sql = `
-				SELECT employee.id, employee.first_name, employee.last_name, role.id AS "role_id"
-				FROM employee, role, department 
-				WHERE department.id = role.department_id AND role.id = employee.role_id`;
-			db.query(sql, (err, employee) => {
-				let employArr = [];
-				employee.
-					})
-				})
-			});
+
 		})
 	})
-}
+};
 
 
 function addRoles() {
@@ -183,6 +183,11 @@ function addRoles() {
 				type: `input`,
 				message: `What is the new role?`,
 				name: `roles`,
+			},
+			{
+				type: `input`,
+				message: `What is the ID for this new role?`,
+				name: `id`,
 			},
 			{
 				type: `number`,
@@ -195,12 +200,13 @@ function addRoles() {
 				name: `department`,
 			},
 		])
-		.then(function ({ employee_id, first, last, role, manager }) {
+		.then(function ({ id, roles, salary, department }) {
 			// Replace role IN for title;
 			db.query(
-				`INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
-			VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`,
+				`INSERT INTO role (id, title, salary, department_id)
+			VALUES (${id}, "${roles}", "${salary}", "${department}")`,
 				function (err, res) {
+					console.log(`New role added ✅`)
 					console.table(res);
 				}
 			);
@@ -214,15 +220,21 @@ function addDepartment() {
 			{
 				type: "input",
 				message: "What is the name of the new department?",
-				name: "department",
+				name: "name",
 			},
+			{
+				type: "input",
+				message: "What is the ID of the new department?",
+				name: "id",
+			}
 		])
-		.then(function ({ employee_id, first, last, role, manager }) {
+		.then(function ({ id, name }) {
 			// Replace role IN for title;
-			db.query(
-				`INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
-		VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`,
+			db.query(`
+				INSERT INTO department (id, name)
+				VALUES ("${id}", "${name}")`,
 				function (err, res) {
+					console.log(`New department added ✅`)
 					console.table(res);
 				}
 			);
