@@ -33,7 +33,10 @@ Happy Coding!
 
 ## Usage
 
-<!-- Screenshots, Video -->
+[View Demo using Goodle Drive](https://drive.google.com/file/d/1D8uiefP3-Jt2OGPDG7Wt0UlLoqYncIwZ/view?usp=sharing)
+
+![Screenshot](./assets/employee-tracker-screenshot.jpg)
+
 
 ## Technology
 
