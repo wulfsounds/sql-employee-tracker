@@ -38,12 +38,12 @@ function mainMenu() {
 				message: "What would you like to do?",
 				choices: [
 					"View All Employees",
-					"Add Employee",
-					"Update Employee Role",
 					"View All Roles",
-					"Add Roles",
 					"View All Departments",
 					"Add Department",
+					"Add Roles",
+					"Add Employee",
+					"Update Employee Role",
 					"Quit",
 				],
 				name: "mainMenu",
@@ -147,44 +147,34 @@ function addEmployees() {
 }
 
 function updateEmployees() {
-	inquirer
+	const employDb = `SELECT * FROM employees`
+	dbconnection.promise().query(employDb, (err, res) => {
+		const employ = res.map(({id, firstName, lastName}) => {
+			({name: firstName + " " + lastName, value: id});
+		inquirer
 		.prompt([
 			{
 				type: "list",
 				message: `Which employee would you like to update?`,
-				choices: function () {
-					let nameArr = [];
-					for (let i = 0; i < res.length; i++) {
-						nameArr.push(res[i].title);
-					}
-					return nameArr;
-				},
-				name: "profile",
-			},
-			{
-				type: "list",
-				message: `What is the employee's new role?`,
-				choices: function () {
-					let roleArr = [];
-					for (let j = 0; j < res.length; j++) {
-						roleArr.push(res[j].title);
-					}
-					return roleArr;
-				},
-				name: "update",
-			},
+				choices: employ,
+				name: "employee",
+			}
 		])
-		.then(function ({ profile, update }) {
-			const query = `
-	UPDATE employees
-	SET role_id = "${update}"
-	WHERE id = "${profile}"`;
-			Sequelize.query(query, function (err, res) {
-				if (err) throw err;
-				console.table(res);
+		.then(({ employee }) => {
+			let sql = `
+				SELECT employee.id, employee.first_name, employee.last_name, role.id AS "role_id"
+				FROM employee, role, department 
+				WHERE department.id = role.department_id AND role.id = employee.role_id`;
+			db.query(sql, (err, employee) => {
+				let employArr = [];
+				employee.
+					})
+				})
 			});
-		});
+		})
+	})
 }
+
 
 function addRoles() {
 	inquirer
@@ -244,19 +234,3 @@ function quit() {
 	db.end();
 }
 
-/* 
-// CURRENT TEMPLATE //
-db.query(`SELECT * FROM department`, function(err, res) {
-	console.log(`Viewing all departments ✅`);
-	console.table(res);
-	loop();
-})
-
-// OLD TEMPLATE //
-const query = `
-INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
-VALUES ("${employee_id}", "${first}", "${last}", "${role}", "${manager}")`;
-db.query(query, function (err, res) {
-	if (err) throw err;
-	console.table(res)
-*/
