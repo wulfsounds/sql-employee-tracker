@@ -1,17 +1,17 @@
-SELECT *
-FROM department;
-
+-- Department
 SELECT role.id, role.title, role.salary
 FROM role
-JOIN department ON role.department_id = department.id;
+JOIN department ON role.department_id = department.name;
 
-SELECT employee_info.id, employee_info.first_name, employee_info.last_name
-FROM employee_info
-JOIN role ON employee_info.role_id = role.id;
+-- Role
+SELECT employees.id, employees.first_name, employees.last_name
+FROM employees
+JOIN role ON employees.role_id = role.title;
 
+-- Employees
 SELECT
     e.first_name + ' ' + e.last_name employee,
     m.first_name + ' ' + m.last_name manager
 FROM
-    sales.staffs e
-INNER JOIN sales.staffs m ON m.staff_id = e.manager_id;
+    employees e
+INNER JOIN employees m ON m.id = e.manager_id;
