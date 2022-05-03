@@ -4,7 +4,7 @@
 
 ## Description
 
-The README Generator is a simple tool that allows the user to create a professional README file. This application is created, maintained, and operational using Node.js. It's purpose is for educational purposes with intent on building a portfolio for the professional world. 
+The Employee Tracker is a command-line application built with a back-end, Express.js server using a content management system (CMS) interface. The application stores basic employee information in a SQL database using a CRUD api.
 
 ## Table of Contents
 
@@ -40,7 +40,7 @@ Happy Coding!
 
 ## Technology
 
-Made using mySQL, Node.js, 
+Made using mySQL, Node, and Express.js
 
 ## License
 
